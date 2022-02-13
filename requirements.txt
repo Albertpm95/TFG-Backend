@@ -2,4 +2,9 @@
 # The Python Worker is managed by Azure Functions platform
 # Manually managing azure-functions-worker may cause unexpected issues
 
+#Aqui se ponen las apis que han de usarse, asi cuando las importe Azure sabra importarlas
+
 azure-functions
+google-api-python-client
+google-auth-httplib2
+google-auth-oauthlib

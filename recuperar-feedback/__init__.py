@@ -11,8 +11,8 @@ from googleapiclient.errors import HttpError
 
 SCOPES = ['https://www.googleapis.com/auth/spreadsheets.readonly']
 
-SAMPLE_SPREADSHEET_ID = '1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms'
-SAMPLE_RANGE_NAME = 'Class Data!A2:E'
+SAMPLE_SPREADSHEET_ID = '1NwwotXHGmG_8xYOJ5h52hVl0sWZSBh-9YOb93JEpF6A'
+SAMPLE_RANGE_NAME = 'Confort La Pinada Lab'
 
 
 def main(req: func.HttpRequest) -> func.HttpResponse:

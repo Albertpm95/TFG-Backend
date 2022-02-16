@@ -23,8 +23,11 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     # created automatically when the authorization flow completes for the first
     # time.
 
+    print(os.getcwd())
+
     if os.path.exists('token.json'):
         creds = Credentials.from_authorized_user_file('token.json', SCOPES)
+
     # If there are no (valid) credentials available, let the user log in.
     if not creds or not creds.valid:
         if creds and creds.expired and creds.refresh_token:
@@ -54,5 +57,6 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         for row in values:
             # Print columns A and E, which correspond to indices 0 and 4.
             print('%s, %s' % (row[0], row[4]))
+
     except HttpError as err:
         print(err)

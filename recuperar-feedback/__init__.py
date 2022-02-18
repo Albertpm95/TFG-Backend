@@ -1,6 +1,9 @@
 from __future__ import print_function
 from http.client import HTTPResponse
 
+from flask import Flask
+from flask_cors import CORS, cross_origin
+
 import azure.functions as func
 import json
 import os.path
@@ -18,10 +21,18 @@ SCOPES = ['https://www.googleapis.com/auth/spreadsheets.readonly']
 SAMPLE_SPREADSHEET_ID = '1NwwotXHGmG_8xYOJ5h52hVl0sWZSBh-9YOb93JEpF6A'
 SAMPLE_RANGE_NAME = 'Confort La Pinada Lab'
 
+app = Flask(__name__)
+CORS(app, resources={r"/*": {"origins": "*"}})
 
+
+@app.after_request
+@app.route("/recuperar-feedback")
 def main(req: func.HttpRequest) -> func.HttpResponse:
 
     creds = None
+
+    print(req.get_body)
+
     # The file token.json stores the user's access and refresh tokens, and is
     # created automatically when the authorization flow completes for the first
     # time.
@@ -49,7 +60,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         values = result.get('values', [])
 
         if not values:
-            return func.HttpResponse("No hay datos recientes de feedback")
+            return func.HttpResponse("No hay datos recientes de feedback.")
 
         del values[0]
         b = []

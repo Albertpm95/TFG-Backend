@@ -2,7 +2,7 @@ from __future__ import print_function
 from http.client import HTTPResponse
 
 import azure.functions as func
-
+import json
 import os.path
 
 from google.auth.transport.requests import Request
@@ -49,17 +49,18 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         values = result.get('values', [])
 
         if not values:
-            print('No data found.')
-            return
+            return func.HttpResponse("No hay datos recientes de feedback")
 
         del values[0]
+        b = []
 
         for row in values:
             del row[5]
-            print('%s, %s, %s, %s, %s' %
-                  (row[0], row[1], row[2], row[3], row[4]))
+            b.append(json.dumps([row[0], row[1], row[2], row[3]]))
 
-        return values
+        return func.HttpResponse(
+            json.dumps(b)
+        )
 
     except HttpError as err:
-        print('Hola')
+        return func.HttpResponse("No se han podido procesar los datos")

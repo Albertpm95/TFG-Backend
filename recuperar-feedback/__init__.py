@@ -8,6 +8,8 @@ import azure.functions as func
 import json
 import os.path
 
+import datetime
+
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
@@ -67,7 +69,18 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
 
         for row in values:
             del row[5]
-            b.append(json.dumps([row[0], row[1], row[2], row[3]]))
+
+            registered_date = datetime.datetime.strptime(
+                row[4], '%d/%m/%Y %H:%M:%S')
+            registered_date = registered_date + datetime.timedelta(hours=1)
+            now = datetime.datetime.now()
+
+            difference = now - registered_date
+
+            if (difference.total_seconds() <= 12600):
+                fila = {'Ubicacion': row[0],
+                        'Luminico': row[1], 'Termico': row[2], 'Acustico': row[3]}
+                b.append(fila)
 
         return func.HttpResponse(
             json.dumps(b)

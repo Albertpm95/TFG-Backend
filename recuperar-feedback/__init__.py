@@ -33,8 +33,6 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
 
     creds = None
 
-    print(req.get_body)
-
     # The file token.json stores the user's access and refresh tokens, and is
     # created automatically when the authorization flow completes for the first
     # time.

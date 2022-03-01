@@ -33,27 +33,27 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         forecast = respuesta.json()
 
         respuesta = {
-            'Ciudad': 'Paterna',
-            'Hoy':
+            'ciudad': 'Paterna',
+            'hoy':
                 {
-                    'Temperatura': {
-                        'Temperatura_Actual': forecast['current']['temp'],
-                        'Sensacion_termica': forecast['current']['feels_like']
+                    'temperatura': {
+                        'temperatura_Actual': forecast['current']['temp'],
+                        'sensacion_termica': forecast['current']['feels_like']
                     },
-                    'Presion_atm': forecast['current']['pressure'],
-                    'Humedad': forecast['current']['humidity'],
-                    'Viento': {
-                        'Velocidad': math.ceil(forecast['current']['wind_speed']),
-
-                        'Direccion_viento': arr[(forecast['current']['wind_deg']) % 16],
+                    'presion_atm': forecast['current']['pressure'],
+                    'humedad': forecast['current']['humidity'],
+                    'viento': {
+                        'velocidad': math.ceil(forecast['current']['wind_speed']),
+                        # Transformamos grados 0..360 en una direccion cardinal.
+                        'direccion_viento': arr[(forecast['current']['wind_deg']) % 16],
                     },
-                    'Nubes': forecast['current']['clouds'],
+                    'nubes': forecast['current']['clouds'],
                 },
-            'Prevision_3_dias':
+            'prevision_tres_dias':
                 {
-                    'Dia1': forecast['daily'][0]['weather'][0]['icon'],
-                    'Dia2': forecast['daily'][1]['weather'][0]['icon'],
-                    'Dia3': forecast['daily'][2]['weather'][0]['icon'],
+                    'dia_uno': forecast['daily'][0]['weather'][0]['icon'],
+                    'dia_dos': forecast['daily'][1]['weather'][0]['icon'],
+                    'dia_tres': forecast['daily'][2]['weather'][0]['icon'],
                 }
         }
 

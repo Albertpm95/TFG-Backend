@@ -1,6 +1,8 @@
 from __future__ import print_function
 from http.client import HTTPResponse
 
+from constants import SCOPES, SAMPLE_SPREADSHEET_ID, SAMPLE_RANGE_NAME
+
 from flask import Flask
 from flask_cors import CORS, cross_origin
 
@@ -15,13 +17,6 @@ from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
-
-# If modifying these scopes, delete the file token.json.
-SCOPES = ['https://www.googleapis.com/auth/spreadsheets.readonly']
-
-# The ID and range of a sample spreadsheet.
-SAMPLE_SPREADSHEET_ID = '1NwwotXHGmG_8xYOJ5h52hVl0sWZSBh-9YOb93JEpF6A'
-SAMPLE_RANGE_NAME = 'Confort La Pinada Lab'
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
@@ -76,8 +71,8 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
             difference = now - registered_date
 
             if (difference.total_seconds() <= 12600):
-                fila = {'Ubicacion': row[0],
-                        'Luminico': row[1], 'Termico': row[2], 'Acustico': row[3]}
+                fila = {'ubicacion': row[0],
+                        'luminico': row[1], 'termico': row[2], 'acustico': row[3]}
                 b.append(fila)
 
         return func.HttpResponse(

@@ -34,6 +34,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
 
         respuesta = {
             'ciudad': 'Paterna',
+            'icono': forecast['current']['weather']['icon'],
             'hoy':
                 {
                     'temperatura': {
@@ -48,13 +49,13 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
                         'direccion_viento': arr[(forecast['current']['wind_deg']) % 16],
                     },
                     'nubes': forecast['current']['clouds'],
-                },
+            },
             'prevision_tres_dias':
                 {
                     'dia_uno': forecast['daily'][0]['weather'][0]['icon'],
                     'dia_dos': forecast['daily'][1]['weather'][0]['icon'],
                     'dia_tres': forecast['daily'][2]['weather'][0]['icon'],
-                }
+            }
         }
 
         return func.HttpResponse(

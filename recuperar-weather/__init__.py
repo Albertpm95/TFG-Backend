@@ -1,20 +1,17 @@
 from __future__ import print_function
 from http.client import HTTPResponse
+from urllib.error import HTTPError
+
+from constants import API_KEY_WEATHER, LAT, LONG
+
+import json
+import math
+import requests
 
 from flask import Flask
 from flask_cors import CORS, cross_origin
 
 import azure.functions as func
-
-from pyowm import OWM
-from pyowm.utils import config
-from pyowm.utils import timestamps
-
-
-owm = OWM('9416facf5188cc40fe5ba4f71e2f4f06')
-mgr = owm.weather_manager()
-
-api_key = '9416facf5188cc40fe5ba4f71e2f4f06'
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
@@ -23,17 +20,47 @@ CORS(app, resources={r"/*": {"origins": "*"}})
 @app.after_request
 @app.route("/recuperar-weather")
 def main(req: func.HttpRequest) -> func.HttpResponse:
-    observation = mgr.weather_at_place('Paterna,ES')
-    w = observation.weather
-    w.detailed_status         # 'clouds'
-    w.wind()                  # {'speed': 4.6, 'deg': 330}
-    w.humidity                # 87
 
-    # {'temp_max': 10.5, 'temp': 9.7, 'temp_min': 9.0}
-    w.temperature('celsius')
-    w.rain                    # {}
-    w.heat_index              # None
-    w.clouds                  # 75
-    print(w.temperature)
+    arr = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE',
+           'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW', ]
 
-    return 'ok'
+    url = 'https://api.openweathermap.org/data/2.5/onecall?lat={0}&lon={1}&exclude=hourly,minutely&appid={2}&lang=es&&units=metric'.format(
+        LAT, LONG, API_KEY_WEATHER)
+
+    try:
+        respuesta = requests.get(url)
+
+        forecast = respuesta.json()
+
+        respuesta = {
+            'Ciudad': 'Paterna',
+            'Hoy':
+                {
+                    'Temperatura': {
+                        'Temperatura_Actual': forecast['current']['temp'],
+                        'Sensacion_termica': forecast['current']['feels_like']
+                    },
+                    'Presion_atm': forecast['current']['pressure'],
+                    'Humedad': forecast['current']['humidity'],
+                    'Viento': {
+                        'Velocidad': math.ceil(forecast['current']['wind_speed']),
+
+                        'Direccion_viento': arr[(forecast['current']['wind_deg']) % 16],
+                    },
+                    'Nubes': forecast['current']['clouds'],
+                },
+            'Prevision_3_dias':
+                {
+                    'Dia1': forecast['daily'][0]['weather'][0]['icon'],
+                    'Dia2': forecast['daily'][1]['weather'][0]['icon'],
+                    'Dia3': forecast['daily'][2]['weather'][0]['icon'],
+                }
+        }
+
+        return func.HttpResponse(
+            json.dumps(respuesta)
+        )
+    except:
+        return func.HttpResponse(
+            json.dumps('Error en la llamada a la API de OpenWeather')
+        )

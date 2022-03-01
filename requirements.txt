@@ -12,4 +12,4 @@ Flask
 Flask-CORS
 responses
 datetime
-pyowm
+requests

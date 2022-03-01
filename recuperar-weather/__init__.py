@@ -34,27 +34,25 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
 
         respuesta = {
             'ciudad': 'Paterna',
-            'icono': forecast['current']['weather']['icon'],
-            'hoy':
-                {
-                    'temperatura': {
-                        'temperatura_Actual': forecast['current']['temp'],
-                        'sensacion_termica': forecast['current']['feels_like']
-                    },
-                    'presion_atm': forecast['current']['pressure'],
-                    'humedad': forecast['current']['humidity'],
-                    'viento': {
-                        'velocidad': math.ceil(forecast['current']['wind_speed']),
-                        # Transformamos grados 0..360 en una direccion cardinal.
-                        'direccion_viento': arr[(forecast['current']['wind_deg']) % 16],
-                    },
-                    'nubes': forecast['current']['clouds'],
+            'icono': 'http://openweathermap.org/img/w/{0}.png'.format(forecast['current']['weather'][0]['icon']),
+            'hoy': {
+                'temperatura': {
+                    'temperatura_Actual': forecast['current']['temp'],
+                    'sensacion_termica': forecast['current']['feels_like']
+                },
+                'presion_atm': forecast['current']['pressure'],
+                'humedad': forecast['current']['humidity'],
+                'viento': {
+                    'velocidad': math.ceil(forecast['current']['wind_speed']),
+                    # Transformamos grados 0..360 en una direccion cardinal.
+                    'direccion_viento': arr[(forecast['current']['wind_deg']) % 16],
+                },
+                'nubes': forecast['current']['clouds'],
             },
-            'prevision_tres_dias':
-                {
-                    'dia_uno': forecast['daily'][0]['weather'][0]['icon'],
-                    'dia_dos': forecast['daily'][1]['weather'][0]['icon'],
-                    'dia_tres': forecast['daily'][2]['weather'][0]['icon'],
+            'prevision_tres_dias': {
+                'dia_uno': 'http://openweathermap.org/img/w/{0}.png'.format(forecast['daily'][0]['weather'][0]['icon']),
+                'dia_dos': 'http://openweathermap.org/img/w/{0}.png'.format(forecast['daily'][1]['weather'][0]['icon']),
+                'dia_tres': 'http://openweathermap.org/img/w/{0}.png'.format(forecast['daily'][2]['weather'][0]['icon']),
             }
         }
 

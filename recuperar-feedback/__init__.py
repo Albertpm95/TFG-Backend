@@ -19,7 +19,8 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "*"}})
+CORS(app, resources={
+     r"/*": {"origins": "*"}})
 
 
 @app.after_request

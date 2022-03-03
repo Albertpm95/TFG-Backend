@@ -14,7 +14,8 @@ from flask_cors import CORS, cross_origin
 import azure.functions as func
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "*"}})
+CORS(app, resources={
+     r"/*": {"origins": "*"}})
 
 
 @app.after_request

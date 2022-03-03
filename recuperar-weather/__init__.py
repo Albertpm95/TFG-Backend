@@ -37,7 +37,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
             'icono': 'http://openweathermap.org/img/w/{0}.png'.format(forecast['current']['weather'][0]['icon']),
             'hoy': {
                 'temperatura': {
-                    'temperatura_Actual': forecast['current']['temp'],
+                    'temperatura_actual': forecast['current']['temp'],
                     'sensacion_termica': forecast['current']['feels_like']
                 },
                 'presion_atm': forecast['current']['pressure'],

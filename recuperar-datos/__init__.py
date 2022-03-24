@@ -9,7 +9,7 @@ from flask import Flask
 from flask_cors import CORS, cross_origin
 
 
-from constants import DSHBRD_1, DSHBRD_2, URL_GRAFANA, API_KEY_GRAFANA, LOGIN_USR, LOGIN_PSW
+from constants import DSHBRD_UID_1, DSHBRD_UID_2, URL_GRAFANA, API_KEY_GRAFANA, LOGIN_USR, LOGIN_PSW
 
 import azure.functions as func
 
@@ -19,11 +19,15 @@ CORS(app, resources={
 
 headers = {
     'Authorization': 'Bearer ' + API_KEY_GRAFANA,
+    'login': LOGIN_USR,
+    'email': LOGIN_PSW
+
 }
 auth = (LOGIN_USR, LOGIN_PSW)
 
-url_1 = URL_GRAFANA + 'api/dashboards/uid/' + DSHBRD_1
-url_2 = URL_GRAFANA + 'api/dashboards/uid/' + DSHBRD_2
+url_1 = URL_GRAFANA + 'api/dashboards/uid/' + DSHBRD_UID_1
+url_2 = URL_GRAFANA + 'api/dashboards/uid/' + DSHBRD_UID_1
+url_3 = URL_GRAFANA + 'api/dashboards/home'
 
 
 @app.after_request
@@ -31,41 +35,30 @@ url_2 = URL_GRAFANA + 'api/dashboards/uid/' + DSHBRD_2
 def main(req: func.HttpRequest) -> func.HttpResponse:
 
     try:
-        respuesta = requests.get(
+        respuesta_1 = requests.get(
             url_1, auth=auth
+        )
+        respuesta_2 = requests.get(
+            url_2, auth=auth
+        )
+        respuesta_3 = requests.get(
+            url_3, auth=auth
         )
 
         try:
-            respuestaJSON = respuesta.json()
-            print(respuestaJSON)
-
-            with open('respuestaJSON.txt', 'w') as rJson:
-                rJson.write(respuestaJSON)
+            respuestaJSON_1 = respuesta_1.json()
+            respuestaJSON_2 = respuesta_2.json()
+            respuestaJSON_3 = respuesta_3.json()
+            print(respuestaJSON_1)
+            print(respuestaJSON_2)
+            print(respuestaJSON_3)
 
         except:
             print('No se puede mostrar json')
 
-        try:
-            request = respuesta.request
-            with open('request.txt', 'w') as a:
-                a.write(request)
-        except:
-            print('No se puede mostrar request')
-
-        try:
-            headers = respuesta.headers
-            with open('headers.txt', 'w') as b:
-                b.write(headers)
-        except:
-            print('No se puede mostrar headers')
-
-        try:
-            content = respuesta.content
-            with open('content.txt', 'w') as c:
-                c.write(content)
-        except:
-            print('No se puede mostrar content')
     except:
         print('La llamada a la URL no ha funcionado.')
 
-    return 'ok'
+    return func.HttpResponse(
+        json.dumps(respuestaJSON_1)
+    )

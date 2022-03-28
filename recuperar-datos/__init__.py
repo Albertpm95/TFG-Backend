@@ -36,22 +36,23 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
 
     try:
         respuesta_1 = requests.get(
-            url_1, auth=auth
+            url_1, auth=auth, headers=headers
         )
         respuesta_2 = requests.get(
-            url_2, auth=auth
+            url_2, auth=auth, headers=headers
         )
         respuesta_3 = requests.get(
-            url_3, auth=auth
+            url_3, auth=auth, headers=headers
         )
 
         try:
+            print(respuesta_1)
             respuestaJSON_1 = respuesta_1.json()
             respuestaJSON_2 = respuesta_2.json()
             respuestaJSON_3 = respuesta_3.json()
-            print(respuestaJSON_1)
-            print(respuestaJSON_2)
-            print(respuestaJSON_3)
+            print(respuesta_1)
+            print(respuesta_2)
+            print(respuesta_3)
 
         except:
             print('No se puede mostrar json')
@@ -60,5 +61,5 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         print('La llamada a la URL no ha funcionado.')
 
     return func.HttpResponse(
-        json.dumps(respuestaJSON_1)
+        json.dumps(respuestaJSON_3)
     )
